@@ -1,0 +1,33 @@
+{
+  "id": "bc-template-postgresql",
+  "description": "Installation for postgresql",
+  "attributes": {
+    "postgresql": {
+      "datadir": "/var/lib/postgresql"
+    }
+  },
+  "deployment": {
+    "postgresql": {
+      "crowbar-revision": 0,
+      "element_states": {
+        "postgresql-server": [ "readying", "ready", "applying" ],
+        "postgresql-client": [ "readying", "ready", "applying" ]
+      },
+      "elements": { 
+        "postgresql-server": [],
+        "postgresql-client": []
+      },
+      "element_order": [
+        [ "postgresql-server", "postgresql-client" ]
+      ],
+      "config": {
+        "environment": "postgresql-base-config",
+        "mode": "full",
+        "transitions": false,
+        "transition_list": [
+        ]
+      }
+    }
+  }
+}
+
