@@ -98,3 +98,22 @@ echo "ALTER ROLE postgres ENCRYPTED PASSWORD '#{node[:postgresql][:password][:po
   end
   action :run
 end
+
+# For Crowbar we also need the "db_maker" user
+bash "assign-db_maker-password" do
+  user 'postgres'
+  code <<-EOH
+echo "CREATE ROLE db_maker WITH LOGIN CREATEDB CREATEROLE ENCRYPTED PASSWORD '#{node[:postgresql][:db_maker_password]}';" | psql
+  EOH
+  not_if do
+    begin
+      require 'rubygems'
+      Gem.clear_paths
+      require 'pg'
+      conn = PGconn.connect("localhost", 5432, nil, nil, nil, "db_maker", node['postgresql']['db_maker_password'])
+    rescue PGError
+      false
+    end
+  end
+  action :run
+end
