@@ -54,4 +54,4 @@ rpms:
     - postgresql-common
 gems:
   pkgs:
-    - postgresql   
+    - pg

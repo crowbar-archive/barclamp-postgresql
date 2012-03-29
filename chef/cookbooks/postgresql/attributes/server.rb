@@ -16,7 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
- 
+default['postgresql']['listen_addresses'] = ipaddress
+default['postgresql']['network_address'] = ""
+default['postgresql']['network_mask'] = ""
+
 case platform
 when "debian"
  
@@ -58,7 +61,7 @@ when "redhat","centos","scientific","amazon"
  
 when "suse"
  
-  if platform_version.to_f <= 11.1
+  if platform_version.to_f <= 11.2
     default[:postgresql][:version] = "8.3"
   else
     default[:postgresql][:version] = "8.4"
