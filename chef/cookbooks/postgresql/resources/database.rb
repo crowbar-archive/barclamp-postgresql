@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-actions :flush_tables_with_read_lock, :unflush_tables, :create_db, :query
+actions :create_db, :query
 
 attribute :host, :kind_of => String
 attribute :username, :kind_of => String

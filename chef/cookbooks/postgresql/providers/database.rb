@@ -19,30 +19,6 @@
 
 include Opscode::Postgresql::Database
 
-action :flush_tables_with_read_lock do
-  if exists?
-    begin
-      Chef::Log.info "postgresql_database: flushing tables with read lock"
-      db.query "flush tables with read lock"
-      new_resource.updated_by_last_action(true)
-    ensure
-      db.close
-    end
-  end
-end
-
-action :unflush_tables do
-  if exists?
-    begin
-      Chef::Log.info "postgresql_database: unlocking tables"
-      db.query "unlock tables"
-      new_resource.updated_by_last_action(true)
-    ensure
-      db.close
-    end
-  end
-end
-
 action :create_db do
   unless exists?
     begin
