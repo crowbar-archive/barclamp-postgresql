@@ -1,15 +1,19 @@
 begin
-  require 'postgresql'
+  require 'pg'
 rescue LoadError
-  Chef::Log.info("Missing gem 'postgresql'")
+  Chef::Log.info("Missing gem 'pg'")
 end
 
 module Opscode
-  module postgresql
+  module Postgresql
     module Database
-      def db
-        @db ||= ::postgresql.new new_resource.host, new_resource.username, new_resource.password
-      end
+      def db(dbname=nil)
+        @db ||= ::PGconn.connect( :host => new_resource.host,
+                                  :port => 5432,
+                                  :dbname => dbname,
+                                  :user => new_resource.username,
+                                  :password => new_resource.password)
+        end
       def close
         @db.close rescue nil
         @db = nil
