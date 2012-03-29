@@ -16,7 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
- 
+default['postgresql']['listen_addresses'] = ipaddress
+default['postgresql']['network_address'] = ""
+default['postgresql']['network_mask'] = ""
+
 case platform
 when "debian"
  

@@ -81,3 +81,5 @@ local   all         all                               ident <%= @ident %>
 host    all         all         127.0.0.1/32          md5
 # IPv6 local connections:
 host    all         all         ::1/128               md5
+
+host    all         all         <%= node.postgresql.network_address -%>    <%= node.postgresql.network_mask -%> md5

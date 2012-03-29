@@ -4,7 +4,9 @@
 #
 # Author:: Joshua Timberman (<joshua@opscode.com>)
 # Author:: Lamont Granquist (<lamont@opscode.com>)
+# Author:: Ralf Haferkamp (<rhafer@suse.com>)
 # Copyright 2009-2011, Opscode, Inc.
+# Copyright 2012, SUSE
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,7 +35,26 @@ when "8.3"
 when "8.4"
   node.default[:postgresql][:ssl] = "true"
 end
- 
+
+# For Crowbar, we need to set the address to bind - default to admin node.
+addr = node['postgresql']['listen_addresses'] || ""
+newaddr = Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "admin").address
+if addr != newaddr
+  node['postgresql']['listen_addresses'] = newaddr
+  node.save
+end
+# We also need to add the network + mask to give access to other nodes
+# in pg_hba.conf
+netaddr = node['postgresql']['network_address'] || ""
+netmask = node['postgresql']['network_mask'] || ""
+newnetaddr = Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "admin").subnet
+newnetmask = Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "admin").subnet
+if netaddr != newnetaddr or netmask != newnetmask
+  node['postgresql']['network_address'] = newnetaddr
+  node['postgresql']['network_mask'] = newnetmask
+  node.save
+end
+
 # Include the right "family" recipe for installing the server
 # since they do things slightly differently.
 case node.platform
