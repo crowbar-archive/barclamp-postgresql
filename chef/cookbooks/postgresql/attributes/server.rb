@@ -58,7 +58,7 @@ when "redhat","centos","scientific","amazon"
  
 when "suse"
  
-  if platform_version.to_f <= 11.1
+  if platform_version.to_f <= 11.2
     default[:postgresql][:version] = "8.3"
   else
     default[:postgresql][:version] = "8.4"
