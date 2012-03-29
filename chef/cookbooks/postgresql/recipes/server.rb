@@ -48,6 +48,11 @@ template "#{node[:postgresql][:dir]}/pg_hba.conf" do
   owner "postgres"
   group "postgres"
   mode 0600
+  if (node[:postgresql][:version] == "8.3")
+    variables( :ident => "sameuser" )
+  else
+    variables( :ident => "" )
+  end
   notifies :reload, resources(:service => "postgresql"), :immediately
 end
  
